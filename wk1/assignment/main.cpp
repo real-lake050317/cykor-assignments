@@ -1,4 +1,3 @@
-
 /*  call_stack
     
     실제 시스템에서는 스택이 메모리에 저장되지만, 본 과제에서는 `int` 배열을 이용하여 메모리를 구현합니다.
@@ -21,9 +20,10 @@
     ========================================================================
 */
 #include <iostream>
-#include <stdio.h>
 #include <cstring>
+
 #define STACK_SIZE 50 // 최대 스택 크기
+#define ERROR_SENTINEL -999
 
 int            call_stack[STACK_SIZE];         // Call Stack을 저장하는 배열
 std::string    stack_info[STACK_SIZE];     // Call Stack 요소에 대한 설명을 저장하는 배열
@@ -63,31 +63,41 @@ void print_stack()
         if (call_stack[i] != -1)
             std::cout << i << ": " << stack_info[i] << " = " << call_stack[i];
         else
-            std::cout << i << ": " << stack_info[i] << std::endl;
+            std::cout << i << ": " << stack_info[i];
 
         if (i == SP)
             std::cout << "    <=== [esp]" << std::endl;
         else if (i == FP)
             std::cout << "    <=== [ebp]" << std::endl;
         else
-            std::cout << "\n";
+            std::cout << std::endl;
     }
     std::cout << "================================\n\n" << std::endl;
+
+    return;
 }
 
-void push() {
+void push(int value, std::string info) { 
     if (SP >= STACK_SIZE - 1) {
-        std::cout << "Stack is full" << std::endl;
+        std::cerr << "Stack is full" << std::endl; // prints error message to prevent stack overflow
         return;
     }
-    ++SP;
     
-    call_stack[SP] = -1;
-    stack_info[SP] = "Return Address";
+    ++SP;
+    call_stack[SP] = value;
+    stack_info[SP] = info;
+
+    return;
 }
 
 int pop() {
+    if (SP == -1) {
+        std::cerr << "Stack is already empty" << std::endl; // prints error message when trying to pop from an empty stack
+        return ERROR_SENTINEL;
+    }
+
     int return_value = call_stack[SP];
+
     call_stack[SP] = 0;
     stack_info[SP] = "";
     --SP;
@@ -95,8 +105,25 @@ int pop() {
     return return_value;
 }
 
-void prologue(std::string function_name, int num) {
+void prologue(std::string function_name) {
+    push(-1, "Return Address");
+    push(FP, function_name + " SFP");
+    FP = SP;
+
+    return;
+}
+
+void epilogue() {
+    int return_address = pop();
+    while (SP > FP) {
+        return_address = pop();
+    }
     
+    if (return_address == ERROR_SENTINEL) {
+        std::cerr << "Error: The stack is empty, cannot pop return address." << std::endl;
+    }
+
+    return;
 }
 
 //func 내부는 자유롭게 추가해도 괜찮으나, 아래의 구조를 바꾸지는 마세요
@@ -105,10 +132,20 @@ void func1(int arg1, int arg2, int arg3)
     int var_1 = 100;
 
     // func1의 스택 프레임 형성 (함수 프롤로그 + push)
+    prologue("func1");
+    push(arg1, "arg1");
+    push(arg2, "arg2");
+    push(arg3, "arg3");
+    push(var_1, "var_1");
     print_stack();
+    
     func2(11, 13);
+
     // func2의 스택 프레임 제거 (함수 에필로그 + pop)
     print_stack();
+    epilogue();
+
+    return;
 }
 
 
@@ -117,10 +154,19 @@ void func2(int arg1, int arg2)
     int var_2 = 200;
 
     // func2의 스택 프레임 형성 (함수 프롤로그 + push)
+    prologue("func2");
+    push(arg1, "arg1");
+    push(arg2, "arg2");
+    push(var_2, "var_2");
     print_stack();
+
     func3(77);
+
     // func3의 스택 프레임 제거 (함수 에필로그 + pop)
     print_stack();
+    epilogue();
+
+    return;
 }
 
 
@@ -130,15 +176,24 @@ void func3(int arg1)
     int var_4 = 400;
 
     // func3의 스택 프레임 형성 (함수 프롤로그 + push)
-    print_stack();
-}
+    prologue("func3");
+    push(arg1, "arg1");
+    push(var_3, "var_3");
+    push(var_4, "var_4");
 
+    // func3의 스택 프레임 제거 (함수 에필로그 + pop)
+    print_stack();
+    epilogue();
+    return;
+}
 
 //main 함수에 관련된 stack frame은 구현하지 않아도 됩니다.
 int main()
 {
     func1(1, 2, 3);
     // func1의 스택 프레임 제거 (함수 에필로그 + pop)
+    print_stack();
+    epilogue();
     print_stack();
     return 0;
 }
