@@ -1,14 +1,4 @@
 {
-    "github.copilot.enable": {
-        "*": false,
-        "plaintext": true,
-        "markdown": true,
-        "scminput": false,
-        "yaml": false,
-        "javascript": true,
-        "java": false,
-        "typescriptreact": true
-    },
     "files.associations": {
         "__bit_reference": "cpp",
         "__hash_table": "cpp",

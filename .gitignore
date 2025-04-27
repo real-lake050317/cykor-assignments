@@ -1,2 +1,4 @@
 **/output/
 base.c
+.vscode/
+*.o

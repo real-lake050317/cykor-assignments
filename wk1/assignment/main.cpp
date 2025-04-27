@@ -20,11 +20,13 @@
     반환 주소값을 push할 경우                 : "Return Address"
     ========================================================================
 */
+#include <iostream>
 #include <stdio.h>
+#include <cstring>
 #define STACK_SIZE 50 // 최대 스택 크기
 
-int     call_stack[STACK_SIZE];         // Call Stack을 저장하는 배열
-char    stack_info[STACK_SIZE][20];     // Call Stack 요소에 대한 설명을 저장하는 배열
+int            call_stack[STACK_SIZE];         // Call Stack을 저장하는 배열
+std::string    stack_info[STACK_SIZE];     // Call Stack 요소에 대한 설명을 저장하는 배열
 
 /*  SP (Stack Pointer), FP (Frame Pointer)
 
@@ -34,7 +36,7 @@ char    stack_info[STACK_SIZE][20];     // Call Stack 요소에 대한 설명을
     FP는 현재 함수의 스택 프레임 포인터입니다.
     실행 중인 함수 스택 프레임의 sfp를 가리킵니다.
 */
-int SP = -1; 
+int SP = -1;
 int FP = -1;
 
 void func1(int arg1, int arg2, int arg3);
@@ -49,29 +51,53 @@ void print_stack()
 {
     if (SP == -1)
     {
-        printf("Stack is empty.\n");
+        std::cout << "Stack is empty." << std::endl;
         return;
     }
 
-    printf("====== Current Call Stack ======\n");
+    std::cout << "====== Current Call Stack ======" << std::endl;
+
     
     for (int i = SP; i >= 0; i--)
     {
         if (call_stack[i] != -1)
-            printf("%d : %s = %d", i ,stack_info[i], call_stack[i]);
+            std::cout << i << ": " << stack_info[i] << " = " << call_stack[i];
         else
-            printf("%d : %s", i, stack_info[i]);
+            std::cout << i << ": " << stack_info[i] << std::endl;
 
         if (i == SP)
-            printf("    <=== [esp]\n");
+            std::cout << "    <=== [esp]" << std::endl;
         else if (i == FP)
-            printf("    <=== [ebp]\n");
+            std::cout << "    <=== [ebp]" << std::endl;
         else
-            printf("\n");
+            std::cout << "\n";
     }
-    printf("================================\n\n");
+    std::cout << "================================\n\n" << std::endl;
 }
 
+void push() {
+    if (SP >= STACK_SIZE - 1) {
+        std::cout << "Stack is full" << std::endl;
+        return;
+    }
+    ++SP;
+    
+    call_stack[SP] = -1;
+    stack_info[SP] = "Return Address";
+}
+
+int pop() {
+    int return_value = call_stack[SP];
+    call_stack[SP] = 0;
+    stack_info[SP] = "";
+    --SP;
+
+    return return_value;
+}
+
+void prologue(std::string function_name, int num) {
+    
+}
 
 //func 내부는 자유롭게 추가해도 괜찮으나, 아래의 구조를 바꾸지는 마세요
 void func1(int arg1, int arg2, int arg3)
