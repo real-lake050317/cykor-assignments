@@ -118,7 +118,8 @@ void epilogue() {
     while (SP > FP) {
         return_address = pop();
     }
-    
+    FP = pop();
+
     if (return_address == ERROR_SENTINEL) {
         std::cerr << "Error: The stack is empty, cannot pop return address." << std::endl;
     }
