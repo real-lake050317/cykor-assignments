@@ -33,12 +33,13 @@ int main() {
             std::string dirname;
             std::cin >> dirname;
 
-            currentDir->mkdir(dirname);
+            currentDir->mkdir(currentDir, dirname);
         } else if (command == "ls") {
             currentDir->listDir();
         } else if (command == "cd") {
             std::string dirname;
             std::cin >> dirname;
+            
             currentDir->changeDir(currentDir, dirname);
         } else if (command == "exit") {
             break;

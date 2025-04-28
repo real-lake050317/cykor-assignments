@@ -43,9 +43,10 @@ class Directory {
         }
     }
 
-    void mkdir(std::string dirname) {
+    void mkdir(Directory*& currentDir, std::string dirname) {
         if (subdir == NULL) {
             subdir = new Directory(dirname);
+            subdir->parent = currentDir;
         } else {
             Directory* temp = subdir;
             while (temp->siblingdir != NULL) {
