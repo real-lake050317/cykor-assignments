@@ -43,6 +43,8 @@ int main() {
             currentDir->changeDir(currentDir, dirname);
         } else if (command == "exit") {
             break;
+        } else if (command == "pwd") {
+            currentDir->printWorkingDir(currentDir);
         } else {
             std::cout << "Command not found: " << command << std::endl;
         }

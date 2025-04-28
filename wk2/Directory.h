@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 class Directory {
     public:
@@ -53,6 +54,7 @@ class Directory {
                 temp = temp->siblingdir;
             }
             temp->siblingdir = new Directory(dirname);
+            temp->siblingdir->parent = currentDir;
         }
     }
 
@@ -65,6 +67,23 @@ class Directory {
         std::cout << std::endl;
     }
 
+    void printWorkingDir(Directory*& currentDir) {
+        std::vector<std::string> path;
+
+        Directory* temp = currentDir;
+        while (temp != NULL) {
+            path.push_back(temp->dirname);
+            temp = temp->parent;
+        }
+
+        std::cout << "/";
+        for (auto it = path.rbegin(); it != path.rend(); ++it) {
+            if (*it != "/") {
+                std::cout << *it << "/";
+            }
+        }
+        std::cout << std::endl;
+    }
     void changeDir(Directory*& currentDir, std::string dirname) {
         if (dirname == "..") {
             if (currentDir->parent != NULL) {
@@ -88,7 +107,6 @@ class Directory {
             }
         }
     }
-
     private:
     protected:
 };
