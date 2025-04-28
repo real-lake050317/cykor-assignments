@@ -1,41 +1,12 @@
-/*  call_stack
-    
-    실제 시스템에서는 스택이 메모리에 저장되지만, 본 과제에서는 `int` 배열을 이용하여 메모리를 구현합니다.
-    원래는 SFP와 Return Address에 실제 가상 메모리 주소가 들어가겠지만, 이번 과제에서는 -1로 대체합니다.
-    
-    int call_stack[]      : 실제 데이터(`int 값`) 또는 `-1` (메타데이터 구분용)을 저장하는 int 배열 
-    char stack_info[][]   : call_stack[]과 같은 위치(index)에 대한 설명을 저장하는 문자열 배열
-
-    ==========================call_stack 저장 규칙==========================
-    매개 변수 / 지역 변수를 push할 경우   : int 값 그대로
-    Saved Frame Pointer 를 push할 경우  : call_stack에서의 index
-    반환 주소값을 push할 경우       : -1
-    =======================================================================
-    
-
-    ==========================stack_info 저장 규칙==========================
-    매개 변수 / 지역 변수를 push할 경우        : 변수에 대한 설명
-    Saved Frame Pointer 를 push할 경우  : 어떤 함수의 SFP인지
-    반환 주소값을 push할 경우                 : "Return Address"
-    ========================================================================
-*/
 #include <iostream>
 #include <cstring>
 
-#define STACK_SIZE 50 // 최대 스택 크기
+#define STACK_SIZE      50
 #define ERROR_SENTINEL -999
 
-int            call_stack[STACK_SIZE];         // Call Stack을 저장하는 배열
+int            call_stack[STACK_SIZE];     // Call Stack을 저장하는 배열
 std::string    stack_info[STACK_SIZE];     // Call Stack 요소에 대한 설명을 저장하는 배열
 
-/*  SP (Stack Pointer), FP (Frame Pointer)
-
-    SP는 현재 스택의 최상단 인덱스를 가리킵니다.
-    스택이 비어있을 때 SP = -1, 하나가 쌓이면 `call_stack[0]` -> SP = 0, `call_stack[1]` -> SP = 1, ...
-
-    FP는 현재 함수의 스택 프레임 포인터입니다.
-    실행 중인 함수 스택 프레임의 sfp를 가리킵니다.
-*/
 int SP = -1;
 int FP = -1;
 
@@ -43,10 +14,6 @@ void func1(int arg1, int arg2, int arg3);
 void func2(int arg1, int arg2);
 void func3(int arg1);
 
-/*  
-    현재 call_stack 전체를 출력합니다.
-    해당 함수의 출력 결과들을 바탕으로 구현 완성도를 평가할 예정입니다.
-*/
 void print_stack()
 {
     if (SP == -1)
@@ -127,7 +94,6 @@ void epilogue() {
     return;
 }
 
-//func 내부는 자유롭게 추가해도 괜찮으나, 아래의 구조를 바꾸지는 마세요
 void func1(int arg1, int arg2, int arg3)
 {
     int var_1 = 100;
