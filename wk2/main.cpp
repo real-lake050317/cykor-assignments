@@ -1,37 +1,21 @@
 #include <iostream>
 #include <cstring>
+#include <memory>
+#include "Directory.h"
 
-class Directory {
-    public:
-    Directory* parent       = NULL;
-    Directory* subdir       = NULL;
-    Directory* siblingdir   = NULL;
-
-    std::string dirname;
-
-    Directory(std::string dirname) {
-        this->dirname = dirname;
-    }
-
-    void mkdir(std::string dirname) {
-        if (subdir == NULL) {
-            subdir = new Directory(dirname);
-        }
-    }
-};
+Directory* root = new Directory("/");
+Directory* home = new Directory("~");
+static Directory* currentDir = root;
 
 int main() {
-    // while (true) {
-    //     std::cout << "Hello, World!" << std::endl;
-    // }
-
     Directory *d = new Directory("newfile");
 
-    d->mkdir("newfile");
+    d->mkdir("newfile 1");
+    d->mkdir("newfile 2");
+    d->mkdir("newfile 3");
+    d->mkdir("newfile 4");
 
-    std::cout << (d->subdir->dirname) << std::endl;
-
-
+    std::cout << (d->findSubdir("newfile 2")) << std::endl;
 
     return 0;
 }
