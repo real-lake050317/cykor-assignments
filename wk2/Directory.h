@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Directory {
     public:
     Directory* parent       = NULL;
@@ -52,6 +54,40 @@ class Directory {
             temp->siblingdir = new Directory(dirname);
         }
     }
+
+    void listDir() {
+        Directory* temp = subdir;
+        while (temp != NULL) {
+            std::cout << temp->dirname << "\t";
+            temp = temp->siblingdir;
+        }
+        std::cout << std::endl;
+    }
+
+    void changeDir(Directory*& currentDir, std::string dirname) {
+        if (dirname == "..") {
+            if (currentDir->parent != NULL) {
+                currentDir = currentDir->parent;
+                std::cout << "Changed directory to: " << currentDir->dirname << std::endl;
+            } else {
+                std::cout << "Already at root directory" << std::endl;
+            }
+            return;
+        } else if (dirname == ".") {
+            return;
+        } else if (dirname == "/") {
+            currentDir = this;
+        } else { // need ~
+            Directory* temp = findSubdir(dirname);
+            if (temp != NULL) {
+                std::cout << "Changing directory to: " << dirname << std::endl;
+                currentDir = temp;
+            } else {
+                std::cout << "Directory not found" << std::endl;
+            }
+        }
+    }
+
     private:
     protected:
 };
