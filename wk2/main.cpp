@@ -3,9 +3,9 @@
 #include <memory>
 #include "Directory.h"
 
-Directory* root = new Directory("/");
-Directory* home = new Directory("~");
-static Directory* currentDir = root;
+Directory* root                 = new Directory("/");
+Directory* home                 = new Directory("~");
+static Directory* currentDir    = root;
 
 int main() {
     // currentDir->mkdir("newfile 1");

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <sstream> 
 
 class Directory {
     public:
@@ -84,29 +85,38 @@ class Directory {
         }
         std::cout << std::endl;
     }
-    void changeDir(Directory*& currentDir, std::string dirname) {
-        if (dirname == "..") {
-            if (currentDir->parent != NULL) {
-                currentDir = currentDir->parent;
-                std::cout << "Changed directory to: " << currentDir->dirname << std::endl;
+
+    void changeDir(Directory*& currentDir, const std::string& dirname) {
+        std::stringstream ss(dirname);
+        std::string token;
+        Directory* temp = currentDir;
+    
+        while (std::getline(ss, token, '/')) {
+            if (token.empty() || token == ".") {
+                continue;
+            } else if (token == "..") {
+                if (temp->parent != NULL) {
+                    temp = temp->parent;
+                } else {
+                    std::cout << "Already at root directory" << std::endl;
+                    return;
+                }
             } else {
-                std::cout << "Already at root directory" << std::endl;
-            }
-            return;
-        } else if (dirname == ".") {
-            return;
-        } else if (dirname == "/") {
-            currentDir = this;
-        } else { // need ~
-            Directory* temp = findSubdir(dirname);
-            if (temp != NULL) {
-                std::cout << "Changing directory to: " << dirname << std::endl;
-                currentDir = temp;
-            } else {
-                std::cout << "Directory not found" << std::endl;
+                Directory* nextDir = temp->findSubdir(token);
+                if (nextDir != NULL) {
+                    temp = nextDir;
+                } else {
+                    std::cout << "Directory not found: " << token << std::endl;
+                    return;
+                }
             }
         }
+        currentDir = temp;
+        std::cout << "Changed directory to: " << currentDir->dirname << std::endl;
     }
+    
     private:
+
     protected:
+
 };
