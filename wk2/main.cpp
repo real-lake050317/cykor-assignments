@@ -21,6 +21,19 @@ int main() {
         std::getline(std::cin, input);
 
         auto segments = parseCommands(input);
+
+        bool lastSuccess = true;
+
+        for (const auto& segment : segments) {
+            bool shouldRun = true;
+
+            if (segment.op == Operator::AND && !lastSuccess) shouldRun = false;
+            if (segment.op == Operator::OR && lastSuccess) shouldRun = false;
+
+            if (shouldRun) {
+                lastSuccess = runCommand(segment.command);
+            }
+        }
     }
 
     return 0;

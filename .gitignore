@@ -2,3 +2,4 @@
 base.c
 .vscode/
 *.o
+**/build/
