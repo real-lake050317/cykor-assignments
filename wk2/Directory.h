@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <sstream> 
+#include <sstream>
 
 class Directory {
     public:
@@ -112,9 +112,8 @@ class Directory {
             }
         }
         currentDir = temp;
-        std::cout << "Changed directory to: " << currentDir->dirname << std::endl;
     }
-    
+
     private:
 
     protected:

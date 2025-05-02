@@ -6,6 +6,8 @@
 Directory* root                 = new Directory("/");
 Directory* home                 = new Directory("~");
 static Directory* currentDir    = root;
+std::string username            = "jinhokim";
+std::string devicename          = "MacBook Pro";
 
 int main() {
     // currentDir->mkdir("newfile 1");
@@ -22,10 +24,12 @@ int main() {
     // currentDir->listDir();
 
     // currentDir->changeDir(currentDir, "..");
+    
+    system("clear");
 
-    while (1) {
+    while (true) {
         std::string command;
-        std::cout << "Enter command: ";
+        std::cout << username << "@" << devicename << ": " << currentDir->dirname << " $ ";
         
         std::cin >> command;
 
@@ -34,6 +38,8 @@ int main() {
             std::cin >> dirname;
 
             currentDir->mkdir(currentDir, dirname);
+        } else if (command == "clear") {
+            system("clear");
         } else if (command == "ls") {
             currentDir->listDir();
         } else if (command == "cd") {
