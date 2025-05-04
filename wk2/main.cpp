@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "Directory.h"
 #include "CommandParser.h"
@@ -20,11 +21,11 @@ int main() {
         std::string input;
         std::getline(std::cin, input);
 
-        auto segments = parseCommands(input);
+        std::vector<CommandSegment> segments = parseCommands(input);
 
         bool lastSuccess = true;
 
-        for (const auto& segment : segments) {
+        for (const CommandSegment segment : segments) {
             bool shouldRun = true;
 
             if (segment.op == Operator::AND && !lastSuccess) shouldRun = false;
