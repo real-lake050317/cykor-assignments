@@ -16,6 +16,12 @@ std::vector<CommandSegment> parseCommands(const std::string& input) {
         } else if (token == "||") {
             result.push_back({commandBuffer, Operator::OR});
             commandBuffer.clear();
+        } else if (token == "&") {
+            result.push_back({commandBuffer, Operator::BACKGROUND});
+            commandBuffer.clear();
+        } else if (token == "|") {
+            result.push_back({commandBuffer, Operator::PIPELINE});
+            commandBuffer.clear();
         } else {
             if (!commandBuffer.empty()) commandBuffer += " ";
             commandBuffer += token;
