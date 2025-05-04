@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-enum class Operator { NONE, SEQUENTIAL, AND, OR };
+const enum class Operator { NONE, SEQUENTIAL, AND, OR };
 
 struct CommandSegment {
     std::string command;
