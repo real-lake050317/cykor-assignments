@@ -11,7 +11,7 @@ public:
 
     void        mkdir(Directory* currentDir, std::string name);
     void        listDir();
-    bool        changeDir(Directory*& currentDir, std::string name);
+    bool        changeDir(Directory*& currentDir, const std::string& name);
     void        printWorkingDir(Directory* currentDir);
     Directory*  findSubdir(std::string name);
 

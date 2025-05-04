@@ -1,6 +1,7 @@
 #include "Directory.h"
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 Directory::Directory(std::string name) {
     dirname = name;
@@ -44,25 +45,33 @@ Directory* Directory::findSubdir(std::string name) {
     return nullptr;
 }
 
-bool Directory::changeDir(Directory*& currentDir, std::string name) {
-    if (name == "..") {
-        if (currentDir->parent != nullptr) {
-            currentDir = currentDir->parent;
-            return true;
+bool Directory::changeDir(Directory*& currentDir, const std::string& dirname) {
+    std::stringstream ss(dirname);
+    std::string token;
+    Directory* temp = currentDir;
+
+    while (std::getline(ss, token, '/')) {
+        if (token.empty() || token == ".") {
+            continue;
+        } else if (token == "..") {
+            if (temp->parent != nullptr) {
+                temp = temp->parent;
+            } else {
+                std::cout << "Already at root directory" << std::endl;
+                return false;
+            }
         } else {
-            std::cout << "Already at root directory." << std::endl;
-            return false;
+            Directory* nextDir = temp->findSubdir(token);
+            if (nextDir != nullptr) {
+                temp = nextDir;
+            } else {
+                std::cout << "Directory not found: " << token << std::endl;
+                return false;
+            }
         }
     }
-
-    Directory* temp = currentDir->findSubdir(name);
-    if (temp != nullptr) {
-        currentDir = temp;
-        return true;
-    } else {
-        std::cout << "Directory not found: " << name << std::endl;
-        return false;
-    }
+    currentDir = temp;
+    return true;
 }
 
 void Directory::printWorkingDir(Directory* currentDir) {
@@ -75,7 +84,7 @@ void Directory::printWorkingDir(Directory* currentDir) {
     }
 
     std::cout << "/";
-    for (auto it = path.rbegin(); it != path.rend(); ++it) {
+    for (std::vector<std::string>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) { // type conflict; cannot 
         if (*it != "/") std::cout << *it << "/";
     }
     std::cout << std::endl;
