@@ -25,7 +25,7 @@ int main() {
 
         bool lastSuccess = true;
 
-        for (const CommandSegment segment : segments) {
+        for (const CommandSegment& segment : segments) {
             bool shouldRun = true;
 
             if (segment.op == Operator::AND && !lastSuccess) shouldRun = false;
