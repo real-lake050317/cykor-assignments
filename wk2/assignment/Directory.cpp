@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <unistd.h>
+#include <sys/wait.h>
 
 Directory::Directory(std::string name) {
     dirname = name;
@@ -25,13 +27,30 @@ void Directory::mkdir(Directory* currentDir, std::string name) {
     }
 }
 
-void Directory::listDir() {
-    Directory* temp = subdir;
-    while (temp != nullptr) {
-        std::cout << temp->dirname << "  ";
-        temp = temp->siblingdir;
+void Directory::listDir(bool isBackground) {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        std::cerr << "Error! Fork failed for ls." << std::endl;
+        return;
     }
-    std::cout << std::endl;
+
+    if (pid == 0) {
+        Directory* temp = subdir;
+        while (temp != nullptr) {
+            std::cout << temp->dirname << "  ";
+            temp = temp->siblingdir;
+        }
+        std::cout << std::endl;
+        _exit(0);
+    } else {
+        if (!isBackground) {
+            int status;
+            waitpid(pid, &status, 0);
+        } else {
+            std::cout << "Background process started with PID: " << pid << std::endl;
+        }
+    }
 }
 
 Directory* Directory::findSubdir(std::string name) {
@@ -74,18 +93,37 @@ bool Directory::changeDir(Directory*& currentDir, const std::string& dirname) {
     return true;
 }
 
-void Directory::printWorkingDir(Directory* currentDir) {
-    std::vector<std::string> path;
-    Directory* temp = currentDir;
+void Directory::printWorkingDir(Directory* currentDir, bool isBackground) {
+    pid_t pid = fork();
 
-    while (temp != nullptr) {
-        path.push_back(temp->dirname);
-        temp = temp->parent;
+    if (pid < 0) {
+        std::cerr << "Error! Fork failed for pwd." << std::endl;
+        return;
     }
 
-    std::cout << "/";
-    for (std::vector<std::string>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) { // type conflict; cannot 
-        if (*it != "/") std::cout << *it << "/";
+    if (pid == 0) {
+        std::vector<std::string> path;
+        Directory* temp = currentDir;
+
+        while (temp != nullptr) {
+            path.push_back(temp->dirname);
+            temp = temp->parent;
+        }
+
+        std::cout << "/";
+        for (std::vector<std::string>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) { // type conflict; cannot 
+            if (*it != "/") std::cout << *it << "/";
+        }
+        std::cout << std::endl;
+
+        _exit(0);
+    } else {
+        if (!isBackground) {
+            int status;
+            waitpid(pid, &status, 0);
+        } else {
+            std::cout << "Background process started with PID: " << pid << std::endl;
+        }
     }
-    std::cout << std::endl;
 }
+
