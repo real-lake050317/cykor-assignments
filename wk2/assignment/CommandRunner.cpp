@@ -7,7 +7,7 @@ extern Directory* currentDir;
 extern std::string username;
 extern std::string devicename;
 
-bool runCommand(const std::string& commandLine) {
+bool runCommand(const std::string& commandLine, bool isBackground) {
     std::istringstream iss(commandLine);
     std::string cmd;
     iss >> cmd;
@@ -21,14 +21,30 @@ bool runCommand(const std::string& commandLine) {
         system("clear");
         return true;
     } else if (cmd == "ls") {
-        currentDir->listDir();
+        if (isBackground) {
+            currentDir->listDir(true);
+        } else {
+            currentDir->listDir();
+        }
         return true;
     } else if (cmd == "cd") {
         std::string dirname;
         iss >> dirname;
         return currentDir->changeDir(currentDir, dirname); // must return true/false
     } else if (cmd == "pwd") {
-        currentDir->printWorkingDir(currentDir);
+        if (isBackground) {
+            currentDir->printWorkingDir(currentDir, true);
+        } else {
+            currentDir->printWorkingDir(currentDir);
+        }
+        return true;
+    } else if (cmd == "echo") {
+        std::string message;
+        std::getline(iss, message);
+        std::cout << message << std::endl;
+        return true;
+    } else if (cmd == "whoami") {
+        std::cout << username << "@" << devicename << std::endl;
         return true;
     } else if (cmd == "exit") {
         exit(0);
