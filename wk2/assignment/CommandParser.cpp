@@ -1,4 +1,5 @@
 #include "CommandParser.h"
+
 #include <sstream>
 
 std::vector<CommandSegment> parseCommands(const std::string& input) {

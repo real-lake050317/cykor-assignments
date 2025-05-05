@@ -1,11 +1,12 @@
 #include "CommandRunner.h"
 #include "Directory.h"
+
 #include <sstream>
 #include <iostream>
 
-extern Directory* currentDir;
-extern std::string username;
-extern std::string devicename;
+extern Directory*   currentDir;
+extern std::string  username;
+extern std::string  devicename;
 
 bool runCommand(const std::string& commandLine, bool isBackground) {
     std::istringstream iss(commandLine);

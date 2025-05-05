@@ -1,12 +1,12 @@
-#include <iostream>
-#include <string>
-#include <memory>
-#include <vector>
-
 #include "Directory.h"
 #include "CommandParser.h"
 #include "CommandRunner.h"
 #include "MainRunner.h"
+
+#include <iostream>
+#include <string>
+#include <memory>
+#include <vector>
 
 Directory* root              = new Directory("/");
 Directory* home              = new Directory("~");
