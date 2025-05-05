@@ -20,14 +20,26 @@ void MainRunner() {
     
     bool lastSuccess = true;
 
-    for (const CommandSegment& segment : segments) {
-        bool shouldRun = true;
-
-        if (segment.op == Operator::AND && !lastSuccess) shouldRun = false;
-        if (segment.op == Operator::OR && lastSuccess) shouldRun = false;
-
-        if (shouldRun) {
-            lastSuccess = runCommand(segment.command);
+    for (unsigned long i = 0; i < segments.size(); ++i) {
+        const CommandSegment& segment = segments[i];
+    
+        if (i > 0) {
+            Operator prev = segments[i - 1].op;
+    
+            if (prev == Operator::AND && !lastSuccess) continue;
+            if (prev == Operator::OR && lastSuccess) continue;
         }
+    
+        if (segment.op == Operator::BACKGROUND) {
+            lastSuccess = runCommand(segment.command, true);
+            continue;
+        }
+    
+        if (segment.op == Operator::PIPELINE) {
+            // temporary
+            continue;
+        }
+    
+        lastSuccess = runCommand(segment.command);
     }
 }
