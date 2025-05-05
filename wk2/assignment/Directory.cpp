@@ -49,7 +49,7 @@ void Directory::listDir(bool isBackground) {
             int status;
             waitpid(pid, &status, 0);
         } else {
-            std::cout << "Background process started with PID: " << pid << std::endl;
+            std::cout << "Background process ls started with PID: " << pid << std::endl;
         }
     }
 }
@@ -123,7 +123,7 @@ void Directory::printWorkingDir(Directory* currentDir, bool isBackground) {
             int status;
             waitpid(pid, &status, 0);
         } else {
-            std::cout << "Background process started with PID: " << pid << std::endl;
+            std::cout << "Background process pwd started with PID: " << pid << std::endl;
         }
     }
 }
