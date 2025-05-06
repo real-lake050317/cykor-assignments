@@ -3,3 +3,15 @@ base.c
 .vscode/
 *.o
 **/build/
+
+# exclude LaTeX-related files
+*.tex
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.pyg
+*.toc
+*.pdf
+*.synctex.gz
+*.out

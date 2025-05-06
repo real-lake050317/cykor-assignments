@@ -112,7 +112,7 @@ void Directory::printWorkingDir(Directory* currentDir, bool isBackground) {
         }
 
         std::cout << "/";
-        for (std::vector<std::string>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) { // type conflict; cannot 
+        for (std::vector<std::string>::reverse_iterator it = path.rbegin(); it != path.rend(); ++it) {
             if (*it != "/") std::cout << *it << "/";
         }
         std::cout << std::endl;
