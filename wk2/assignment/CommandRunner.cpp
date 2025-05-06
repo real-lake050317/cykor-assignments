@@ -1,8 +1,8 @@
 #include "CommandRunner.h"
 #include "Directory.h"
 
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 extern Directory*   currentDir;
 extern std::string  username;
