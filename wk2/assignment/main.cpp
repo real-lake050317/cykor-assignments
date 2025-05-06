@@ -14,8 +14,6 @@ Directory* currentDir        = root;
 std::string username         = "jinhokim";
 std::string devicename       = "MacBook Pro";
 
-extern bool runCommand(const std::string& commandLine);
-
 int main() {
     system("clear");
 
