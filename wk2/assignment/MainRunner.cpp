@@ -2,6 +2,7 @@
 #include "MainRunner.h"
 #include "CommandParser.h"
 #include "CommandRunner.h"
+#include "PipelineRunner.h"
 
 #include <iostream>
 #include <string>
@@ -36,7 +37,15 @@ void MainRunner() {
         }
     
         if (segment.op == Operator::PIPELINE) {
-            // temporary
+            std::vector<std::string> pipeline;
+            pipeline.push_back(segment.command);
+
+            while (i + 1 < segments.size() && segments[i].op == Operator::PIPELINE) {
+                ++i;
+                pipeline.push_back(segments[i].command);
+            }
+
+            lastSuccess = runPipeline(pipeline);
             continue;
         }
     
