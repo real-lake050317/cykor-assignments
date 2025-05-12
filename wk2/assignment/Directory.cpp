@@ -7,10 +7,10 @@
 #include <sys/wait.h>
 
 Directory::Directory(std::string name) {
-    dirname = name;
-    parent = nullptr;
-    subdir = nullptr;
-    siblingdir = nullptr;
+    this->dirname = name;
+    this->parent = nullptr;
+    this->subdir = nullptr;
+    this->siblingdir = nullptr;
 }
 
 void Directory::mkdir(Directory* currentDir, std::string name) {
@@ -127,4 +127,3 @@ void Directory::printWorkingDir(Directory* currentDir, bool isBackground) {
         }
     }
 }
-

@@ -40,8 +40,6 @@ void print_stack()
             std::cout << std::endl;
     }
     std::cout << "================================\n\n" << std::endl;
-
-    return;
 }
 
 void push(int value, std::string info) { 
@@ -76,22 +74,21 @@ void prologue(std::string function_name) {
     push(-1, "Return Address");
     push(FP, function_name + " SFP");
     FP = SP;
-
-    return;
 }
 
 void epilogue() {
-    int return_address = pop();
+    if (SP < 1) {
+        std::cerr << "Error" << std::endl;
+        return;
+    }
+
     while (SP > FP) {
-        return_address = pop();
-    }
-    FP = pop();
-
-    if (return_address == ERROR_SENTINEL) {
-        std::cerr << "Error: The stack is empty, cannot pop return address." << std::endl;
+        pop();
     }
 
-    return;
+    FP = call_stack[FP];
+    pop();
+    pop();
 }
 
 void func1(int arg1, int arg2, int arg3)
@@ -159,8 +156,6 @@ int main()
 {
     func1(1, 2, 3);
     // func1의 스택 프레임 제거 (함수 에필로그 + pop)
-    print_stack();
-    epilogue();
     print_stack();
     return 0;
 }
