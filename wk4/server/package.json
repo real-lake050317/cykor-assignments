@@ -1,0 +1,42 @@
+{
+  "name": "cykor-wk4-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/bcrypt": "^5.0.2",
+    "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^4.17.22",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.1",
+    "@types/node-schedule": "^2.1.6",
+    "@types/nodemon": "^1.19.6",
+    "@types/uuid": "^9.0.7",
+    "axios": "^1.9.0",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "date-fns": "^3.3.1",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.4",
+    "morgan": "^1.10.0",
+    "node-schedule": "^2.1.1",
+    "nodemon": "^3.0.2",
+    "rotating-file-stream": "^3.2.1",
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1"
+  }
+}
