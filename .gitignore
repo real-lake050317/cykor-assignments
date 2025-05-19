@@ -14,3 +14,9 @@ base.c
 *.toc
 *.synctex.gz
 *.out
+
+# wk4 files
+**/node_modules/
+.env
+package-lock.json 
+# not a good idea to ignore package-lock, but since it is used only for the assignment, added
