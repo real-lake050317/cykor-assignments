@@ -3,7 +3,7 @@ import { User } from "../@types/User";
 
 const { Schema } = mongoose;
 
-const UserSchema: mongoose.Schema = new Schema(
+const UserSchema: mongoose.Schema<User> = new Schema<User>(
   {
     name: { type: String, required: true, trim: true },
     email: {
@@ -20,4 +20,4 @@ const UserSchema: mongoose.Schema = new Schema(
   { timestamps: true }
 );
 
-export const UserModel = mongoose.model<User>("User", UserSchema, "User");
+export const UserModel: mongoose.Model<User> = mongoose.model<User>("User", UserSchema, "User");
