@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { User } from "../@types/User";
-import { validate } from "uuid";
 
 const { Schema } = mongoose;
 
