@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { RecoilRoot } from "recoil";
 import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import "./App.css";
-import NotFound from "./Pages/NotFound/NotFound";
-import { API_URL } from "./Constants/apiURL";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
+import Main from "./Pages/Main/Main";
+import NotFound from "./Pages/NotFound/NotFound";
+
+import { API_URL } from "./Constants/apiURL";
+
+import "./App.css";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -36,21 +40,28 @@ const App: React.FC = () => {
 
   if (!isLoggedIn) {
     return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </RecoilRoot>
     );
   }
 
   return (
-    <div className="App">
-      <h1>Main Page</h1>
-    </div>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </RecoilRoot>
   );
 };
 

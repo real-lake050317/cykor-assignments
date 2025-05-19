@@ -1,0 +1,66 @@
+.post-upload {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.post-upload h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.post-upload form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post-upload label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.post-upload input[type="text"],
+.post-upload textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+.post-upload textarea {
+  height: 300px;
+  resize: none;
+}
+
+.post-upload button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.post-upload button:hover {
+  background-color: #005fa3;
+}
+
+.post-upload input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.post-upload div:last-child {
+  display: flex;
+  align-items: center;
+}

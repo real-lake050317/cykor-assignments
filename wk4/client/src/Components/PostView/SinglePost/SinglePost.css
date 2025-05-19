@@ -1,0 +1,34 @@
+.single-post {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.single-post:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.post-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.single-post label {
+  display: block;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.post-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+}
