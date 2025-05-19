@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 
 import userRoutes from "./src/routes/user.routes";
 import postRoutes from "./src/routes/post.routes";
+import utilRoutes from "./src/routes/util.routes";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
+app.use("/util", utilRoutes);
 
 const connect = async () => {
   try {
