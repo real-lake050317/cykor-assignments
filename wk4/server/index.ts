@@ -6,6 +6,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 
+import userRoutes from "./src/routes/user.routes";
+
 dotenv.config();
 
 const app: Express = express();
@@ -33,6 +35,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/user", userRoutes);
+
 const connect = async () => {
   try {
     await mongoose.connect(MONGO);
@@ -52,6 +56,10 @@ mongoose.connection.on("disconnected", () => {
 
 mongoose.connection.on("error", (error) => {
   console.log(`[server]: Error occurred; \n Details: ${error}`);
+});
+
+mongoose.connection.on("reconnected", () => {
+  console.log("[server]: Server reconnected to MongoDB");
 });
 
 app.listen(PORT, () => {
