@@ -7,6 +7,7 @@ import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Main from "./Pages/Main/Main";
 import NotFound from "./Pages/NotFound/NotFound";
+import UserPage from "./Pages/UserPage/UserPage";
 
 import { API_URL } from "./Constants/apiURL";
 
@@ -58,6 +59,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/user/:userId" element={<UserPage />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

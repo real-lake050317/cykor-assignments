@@ -2,15 +2,25 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import SinglePost from "./SinglePost/SinglePost";
+import LoadingPage from "../../Pages/LoadingPage/LoadingPage";
 
 import { API_URL } from "../../Constants/apiURL";
 
 import "./PostView.css";
-import { render } from "@testing-library/react";
 
 const PostView: React.FC = () => {
-  const [posts, setPosts] = useState([]);
-  //   const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<
+    Array<{
+      _id: string;
+      title: string;
+      body: string;
+      userName: string;
+      userId: string;
+    }>
+  >([]);
+  const [id, setId] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -22,16 +32,38 @@ const PostView: React.FC = () => {
         })
         .then((response) => {
           setPosts(response.data.posts);
-          // setLoading(false);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching posts:", error);
-          // setLoading(false);
+          setIsLoading(false);
         });
     };
 
+    const checkLogin = async () => {
+      await axios
+        .get(`${API_URL}/util/check-login`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setId(response.data._id);
+          }
+        })
+        .catch((error) => {
+          console.error("Error checking login status:", error);
+        });
+    };
+
+    checkLogin();
     fetchPosts();
   }, []);
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   const renderedPosts = posts.map(
     (post: {
@@ -47,6 +79,8 @@ const PostView: React.FC = () => {
         content={post.body}
         userName={post.userName}
         userId={post.userId}
+        postId={post._id}
+        isMyPost={post.userId === id}
       />
     )
   );
