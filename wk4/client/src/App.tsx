@@ -8,6 +8,7 @@ import Register from "./Pages/Register/Register";
 import Main from "./Pages/Main/Main";
 import NotFound from "./Pages/NotFound/NotFound";
 import UserPage from "./Pages/UserPage/UserPage";
+import LoadingPage from "./Pages/LoadingPage/LoadingPage";
 
 import { API_URL } from "./Constants/apiURL";
 
@@ -15,6 +16,8 @@ import "./App.css";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [myUserId, setMyUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,17 +30,27 @@ const App: React.FC = () => {
         })
         .then((response) => {
           if (response.status === 200) {
+            setMyUserId(response.data._id);
             setIsLoggedIn(true);
+            setIsLoading(false);
           }
         })
         .catch((error) => {
           console.error("Error checking login status:", error);
           setIsLoggedIn(false);
+          setIsLoading(false);
         });
     } else {
       setIsLoggedIn(false);
+      setIsLoading(false);
     }
   }, []);
+
+  if (isLoading) {
+    return (
+      <LoadingPage />
+    );
+  }
 
   if (!isLoggedIn) {
     return (
@@ -59,7 +72,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/user/:userId" element={<UserPage />} />
+          <Route path="/user/:userId" element={<UserPage myId={myUserId} />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

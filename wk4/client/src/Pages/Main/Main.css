@@ -1,48 +1,84 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+/* Main layout with space under the navbar */
+.user-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 70px; /* To account for the navbar height */
 }
 
-.navbar {
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
+/* Container for the profile section */
+.user-page-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 30px 20px;
 }
 
-.navbar ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 20px;
+.user-page-container {
+  background-color: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
 }
 
-.navbar li {
-  color: white;
+/* Profile title */
+.user-page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #343a40;
+}
+
+/* Info section */
+.user-info p {
+  margin: 12px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-info strong {
+  color: #555;
+}
+
+/* Friend toggle */
+.friend-count {
+  margin-top: 20px;
   cursor: pointer;
+  color: #007bff;
+  transition: color 0.2s;
 }
 
-.navbar li:hover {
+.friend-count:hover {
+  color: #0056b3;
   text-decoration: underline;
 }
 
-.section {
-  padding: 20px;
-  background-color: white;
-  margin: 20px auto;
-  width: 80%;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* Friend list section */
+.friend-list {
+  margin-top: 20px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 15px;
 }
 
-.section.upload {
-  margin-top: 30px;
+.friend-list h2 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-.section.main-content {
-  margin-top: 10px;
+.friend-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.friend-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.friend-list li:hover {
+  background-color: #e9ecef;
 }

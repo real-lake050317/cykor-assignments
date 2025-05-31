@@ -1,0 +1,104 @@
+.user-page-wrapper {
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.user-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.user-page-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.user-id-text {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+/* Placeholder for post display */
+.user-posts {
+  margin-top: 30px;
+}
+
+.user-posts h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.user-posts-list {
+  list-style: none;
+  padding: 0;
+}
+
+.user-posts-list li {
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.user-posts-list li:hover {
+  background-color: #e9ecef;
+}
+
+.user-info p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.user-info strong {
+  color: #555;
+}
+
+.friend-count {
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.2s;
+  margin-top: 20px;
+}
+
+.friend-count:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.friend-list {
+  margin-top: 20px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.friend-list h2 {
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.friend-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.friend-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.friend-list li:last-child {
+  border-bottom: none;
+}
+

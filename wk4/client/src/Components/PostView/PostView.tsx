@@ -90,7 +90,7 @@ const PostView: React.FC = () => {
       <header className="post-view-header">
         <h1>View Posts</h1>
       </header>
-      <div className="post-list">{renderedPosts}</div>
+      <div className="post-list">{posts.length === 0 ? "No posts" : renderedPosts}</div>
     </section>
   );
 };
