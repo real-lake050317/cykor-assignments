@@ -22,6 +22,10 @@ const SinglePost: React.FC<{
   postId: string;
 }) => {
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const [updateTitle, setUpdateTitle] = React.useState<string>(props.title);
+  const [updateContent, setUpdateContent] = React.useState<string>(
+    props.content
+  );
 
   const formattedContent = props.content.split("\n").map((line, index) => (
     <span key={index}>
@@ -36,16 +40,55 @@ const SinglePost: React.FC<{
         <input
           className="edit-title"
           type="text"
-          defaultValue={props.title}
-          onBlur={() => setIsEditing(false)}
+          // defaultValue={props.title}
+          value={updateTitle}
+          onChange={(e) => setUpdateTitle(e.target.value)}
+          // onBlur={() => setIsEditing(false)}
         />
         <textarea
           className="edit-content"
-          defaultValue={props.content}
-          onBlur={() => setIsEditing(false)}
+          // defaultValue={props.content}
+          value={updateContent}
+          onChange={(e) => setUpdateContent(e.target.value)}
+          // onBlur={() => setIsEditing(false)}
         />
         <div className="edit-buttons">
-          <button className="save-button" onClick={() => setIsEditing(false)}>
+          <button
+            className="save-button"
+            onClick={() => {
+              if (
+                !updateTitle ||
+                !updateContent ||
+                updateTitle.trim() === "" ||
+                updateContent.trim() === ""
+              ) {
+                alert("Title and content cannot be empty");
+                return;
+              }
+
+              axios
+                .put(
+                  `${API_URL}/post/update-post/${props.postId}`,
+                  {
+                    title: updateTitle,
+                    body: updateContent,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                  }
+                )
+                .then((response) => {
+                  if (response.status === 200) {
+                    window.location.reload();
+                  }
+                })
+                .catch((error) => {
+                  alert("Error updating post");
+                });
+            }}
+          >
             Save
           </button>
           <button className="cancel-button" onClick={() => setIsEditing(false)}>
