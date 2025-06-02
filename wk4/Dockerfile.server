@@ -1,0 +1,15 @@
+# ./server/Dockerfile.server
+FROM node:20
+
+WORKDIR /app
+
+COPY ./server/package*.json ./
+COPY ./server/.env ./
+
+RUN npm install
+
+COPY ./server .
+
+RUN npx tsc
+
+CMD ["node", "index.js"]
