@@ -1,6 +1,7 @@
 services:
   web:
     build: .
+    container_name: php-blog-client
     ports:
       - "8080:80"
     volumes:
@@ -9,6 +10,7 @@ services:
       - default
   db:
     image: mysql:latest
+    container_name: php-blog-db
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_USER: exampleuser
