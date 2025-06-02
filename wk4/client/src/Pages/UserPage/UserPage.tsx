@@ -22,6 +22,32 @@ const UserPage: React.FC<{
   const [user, setUser] = useState<User | null>(null);
   const [friends, setFriends] = useState<User[]>([]);
   const [showFriends, setShowFriends] = useState(false);
+  const [friendStatus, setFriendStatus] = useState<
+    "friends" | "rejected" | "blocked" | "pending" | null
+  >(null);
+
+  useEffect(() => {
+    const checkFriendStatus = async () => {
+      try {
+        const res = await axios.get(
+          `${API_URL}/user/friends/get-friend-relation?friendId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (res.data.success) {
+          setFriendStatus(res.data.relation);
+        }
+      } catch (error) {
+        console.error("Error checking friend status:", error);
+      }
+    };
+
+    checkFriendStatus();
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,10 +86,6 @@ const UserPage: React.FC<{
     fetchUserData();
   }, [userId]);
 
-  useEffect(() => {
-    console.log(props.myId, userId);
-  }, []);
-
   const toggleFriends = () => {
     setShowFriends((prev) => !prev);
   };
@@ -86,7 +108,27 @@ const UserPage: React.FC<{
                 <strong>Account Created:</strong>{" "}
                 {new Date(user.createdAt).toLocaleString()}
               </p>
-              {userId === props.myId ? <></> : <button>Add friend</button>}
+              {userId !== props.myId && (
+                <>
+                  {friendStatus === null && <button>Add Friend</button>}
+                  {friendStatus === "pending" && (
+                    <button disabled>Pending</button>
+                  )}
+                  {friendStatus === "friends" && (
+                    <button disabled>Already Friends</button>
+                  )}
+                  {friendStatus === "rejected" && (
+                    <button disabled style={{ opacity: 0.6 }}>
+                      Request Rejected
+                    </button>
+                  )}
+                  {friendStatus === "blocked" && (
+                    <button disabled style={{ opacity: 0.6 }}>
+                      Blocked
+                    </button>
+                  )}
+                </>
+              )}
               <p>
                 <strong>Last Updated:</strong>{" "}
                 {new Date(user.updatedAt).toLocaleString()}
