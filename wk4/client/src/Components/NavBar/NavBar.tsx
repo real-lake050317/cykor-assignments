@@ -143,7 +143,7 @@ const NavBar: React.FC = () => {
               )}
             </ul>
           </div>
-          <div>
+          <div className="friends-sidebar">
             <h3>Pending Friend Requests</h3>
             <ul>
               {invitationsList.length > 0 ? (
@@ -152,7 +152,7 @@ const NavBar: React.FC = () => {
                 <label>No Friend Requests Found.</label>
               )}
             </ul>
-            <button onClick={onClickFriends}>Close</button>
+            <button onClick={onClickFriends} className="friends-sidebar-close">Close</button>
           </div>
         </div>
       )}
