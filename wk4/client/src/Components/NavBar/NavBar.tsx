@@ -17,58 +17,57 @@ const NavBar: React.FC = () => {
   const onClickFriends = () => {
     setShowFriends(!showFriends);
   };
+  const getFriendsList = () => {
+    axios
+      .get(`${API_URL}/util/check-login`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          axios
+            .get(
+              `${API_URL}/user/friends/get-friends-list?userId=${res.data._id}`
+            )
+            .then((response) => {
+              if (res.status === 200) {
+                setFriends(response.data.friendDetails);
+              }
+            })
+            .catch((err) => {
+              console.error("Error fetching friends list:", err);
+              setFriends([]);
+            });
+        }
+      })
+      .catch((error) => {
+        localStorage.removeItem("token");
+        console.error("Error checking login status:", error);
+        window.location.href = "/";
+      });
+  };
+
+  const getFriendRequests = async () => {
+    axios
+      .get(`${API_URL}/user/friends/get-friend-invitations`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data.invitations);
+          setFriendRequests(response.data.invitations);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching friend requests:", error);
+        setFriendRequests([]);
+      });
+  };
 
   useEffect(() => {
-    const getFriendsList = () => {
-      axios
-        .get(`${API_URL}/util/check-login`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            axios
-              .get(
-                `${API_URL}/user/friends/get-friends-list?userId=${res.data._id}`
-              )
-              .then((response) => {
-                if (res.status === 200) {
-                  setFriends(response.data.friendDetails);
-                }
-              })
-              .catch((err) => {
-                console.error("Error fetching friends list:", err);
-                setFriends([]);
-              });
-          }
-        })
-        .catch((error) => {
-          localStorage.removeItem("token");
-          console.error("Error checking login status:", error);
-          window.location.href = "/";
-        });
-    };
-
-    const getFriendRequests = async () => {
-      axios
-        .get(`${API_URL}/user/friends/get-friend-invitations`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log(response.data.invitations);
-            setFriendRequests(response.data.invitations);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching friend requests:", error);
-          setFriendRequests([]);
-        });
-    };
-
     if (showFriends) {
       getFriendsList();
       getFriendRequests();
@@ -93,7 +92,33 @@ const NavBar: React.FC = () => {
           {request.userDetails.name} ({request.userDetails.email})
         </div>
         <div className="invitation-actions">
-          <button className="accept-btn">Accept</button>
+          <button
+            className="accept-btn"
+            onClick={async () => {
+              await axios
+                .post(
+                  `${API_URL}/user/friends/accept-friend-request?requestId=${request._id}`,
+                  {},
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                  }
+                )
+                .then((response) => {
+                  if (response.status === 200) {
+                    alert("Friend request accepted!");
+                    getFriendsList();
+                    getFriendRequests();
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error accepting friend request:", error);
+                });
+            }}
+          >
+            Accept
+          </button>
           <button className="decline-btn">Decline</button>
         </div>
       </div>
@@ -152,7 +177,9 @@ const NavBar: React.FC = () => {
                 <label>No Friend Requests Found.</label>
               )}
             </ul>
-            <button onClick={onClickFriends} className="friends-sidebar-close">Close</button>
+            <button onClick={onClickFriends} className="friends-sidebar-close">
+              Close
+            </button>
           </div>
         </div>
       )}

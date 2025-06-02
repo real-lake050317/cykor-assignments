@@ -3,8 +3,12 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../../Constants/apiURL";
 
-import "./UserPage.css";
 import NavBar from "../../Components/NavBar/NavBar";
+import LoadingPage from "../LoadingPage/LoadingPage";
+
+import "./UserPage.css";
+import PostView from "../../Components/PostView/PostView";
+import SinglePost from "../../Components/PostView/SinglePost/SinglePost";
 
 interface User {
   _id: string;
@@ -25,6 +29,8 @@ const UserPage: React.FC<{
   const [friendStatus, setFriendStatus] = useState<
     "friends" | "rejected" | "blocked" | "pending" | null
   >(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     const checkFriendStatus = async () => {
@@ -62,21 +68,26 @@ const UserPage: React.FC<{
           const userData: User = res.data.user;
           setUser(userData);
 
-          if (userData.friendList.length > 0) {
-            const friendRequests = userData.friendList.map((friendId) =>
-              axios.get(`${API_URL}/user/get-user-info/${friendId}`, {
+          await axios
+            .get(
+              `${API_URL}/user/friends/get-friends-list?userId=${userData._id}`,
+              {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-              })
-            );
-
-            const friendResponses = await Promise.all(friendRequests);
-            const friendData = friendResponses
-              .filter((res) => res.data.success)
-              .map((res) => res.data.user);
-            setFriends(friendData);
-          }
+              }
+            )
+            .then((response) => {
+              if (response.data.success) {
+                setFriends(response.data.friendDetails);
+                setIsLoading(false);
+              } else {
+                console.error(
+                  "Failed to fetch friends:",
+                  response.data.message
+                );
+              }
+            });
         }
       } catch (error) {
         console.error("Error fetching user or friends:", error);
@@ -86,9 +97,38 @@ const UserPage: React.FC<{
     fetchUserData();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      try {
+        const res = await axios
+          .get(`http://localhost/post/get-posts-by-user-id?id=${userId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            setPosts(res.data.posts);
+          })
+          .catch((error) => {
+            console.error("Error fetching posts:", error);
+          });
+      } catch (error) {
+        console.error("Error fetching user posts:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUserPosts();
+    }
+  }, [userId]);
+
   const toggleFriends = () => {
     setShowFriends((prev) => !prev);
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="user-page">
@@ -110,12 +150,70 @@ const UserPage: React.FC<{
               </p>
               {userId !== props.myId && (
                 <>
-                  {friendStatus === null && <button>Add Friend</button>}
+                  {friendStatus === null && (
+                    <button
+                      onClick={() => {
+                        axios
+                          .post(
+                            `${API_URL}/user/friends/send-friend-request?friendId=${userId}`,
+                            {},
+                            {
+                              headers: {
+                                Authorization: `Bearer ${localStorage.getItem(
+                                  "token"
+                                )}`,
+                              },
+                            }
+                          )
+                          .then((res) => {
+                            if (res.status === 200) {
+                              alert("Friend request sent successfully");
+                              setFriendStatus("pending");
+                            } else {
+                              alert("Failed to send friend request");
+                            }
+                          })
+                          .catch((err) => {
+                            console.error("Error sending friend request:", err);
+                          });
+                      }}
+                    >
+                      Add Friend
+                    </button>
+                  )}
                   {friendStatus === "pending" && (
                     <button disabled>Pending</button>
                   )}
                   {friendStatus === "friends" && (
-                    <button disabled>Already Friends</button>
+                    <button
+                      onClick={() => {
+                        axios
+                          .delete(
+                            `${API_URL}/user/friends/remove-friend?friendId=${userId}`,
+                            {
+                              headers: {
+                                Authorization: `Bearer ${localStorage.getItem(
+                                  "token"
+                                )}`,
+                              },
+                            }
+                          )
+                          .then((res) => {
+                            console.log(res);
+                            if (res.status === 200) {
+                              alert("Friend removed successfully");
+                              window.location.href = `/user/${userId}`;
+                            } else {
+                              alert("Failed to remove friend");
+                            }
+                          })
+                          .catch((err) => {
+                            console.error("Error removing friend:", err);
+                          });
+                      }}
+                    >
+                      Remove Friend
+                    </button>
                   )}
                   {friendStatus === "rejected" && (
                     <button disabled style={{ opacity: 0.6 }}>
@@ -134,7 +232,7 @@ const UserPage: React.FC<{
                 {new Date(user.updatedAt).toLocaleString()}
               </p>
               <p className="friend-count" onClick={toggleFriends}>
-                <strong>Friends:</strong> {user.friendList.length}
+                <strong>Friends:</strong> {friends.length}
               </p>
 
               {showFriends && (
@@ -160,6 +258,23 @@ const UserPage: React.FC<{
           ) : (
             <p>Loading user data...</p>
           )}
+          <div className="user-page-posts">
+            {posts.length === 0 ? (
+              <p>No public posts yet.</p>
+            ) : (
+              posts.map((post) => (
+                <SinglePost
+                  key={post._id}
+                  title={post.title}
+                  content={post.body}
+                  userName={user?.name ?? "Unknown"}
+                  userId={post.userId}
+                  postId={post._id}
+                  isMyPost={props.myId === post.userId}
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

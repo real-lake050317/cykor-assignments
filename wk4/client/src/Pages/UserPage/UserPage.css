@@ -102,3 +102,14 @@
   border-bottom: none;
 }
 
+.user-page-posts {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.user-page-posts h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #343a40;
+}
