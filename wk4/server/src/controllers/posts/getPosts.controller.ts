@@ -4,6 +4,7 @@ import { PostModel } from "../../models/Post.models";
 import { UserModel } from "../../models/User.models";
 
 import { Post } from "../../@types/Post";
+import { FriendRelModel } from "../../models/FriendRel.models";
 
 export const getPosts = async (
   req: Request,
@@ -17,16 +18,19 @@ export const getPosts = async (
     const userId: string = res.locals._id;
 
     const user = await UserModel.findById(userId).exec();
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const friendIds: string[] = user.friendList.map((friend) =>
-      friend.toString()
-    );
+    const friendIds: string[] = await FriendRelModel.find({
+      userId: user._id,
+    })
+      .select("friendId")
+      .then((friends) => friends.map((friend) => friend.friendId.toString()));
 
     const posts: Post[] = await PostModel.find({
-      $or: [{ isPrivate: false }, { userId: { $in: friendIds } }],
+      $or: [{ isPrivate: false }, { userId: { $in: friendIds } }, { userId }],
     })
       .sort({ createdAt: -1 })
       .skip(skip)

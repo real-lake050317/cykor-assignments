@@ -30,7 +30,13 @@ const SECRET: string = process.env.SECRET
       throw new Error("SECRET token is not given");
     })();
 
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://cykor-wk4-jhk.vercel.app"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(morgan("dev"));

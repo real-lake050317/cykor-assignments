@@ -20,7 +20,7 @@ router.post("/login", login);
 
 router.get("/get-user-info/:id", getUserInfo);
 
-router.get("/friends/send-friend-request", verifyToken, sendFriendRequest);
+router.post("/friends/send-friend-request", verifyToken, sendFriendRequest);
 router.post("/friends/accept-friend-request", verifyToken, acceptFriendRequest);
 router.get("/friends/get-friends-list", getFriendsList);
 router.get("/friends/get-friend-invitations", verifyToken, getFriendInvitations);
