@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: /');
                 exit;
             }
-            $title   = trim($_POST['title'] ?? '');
+            $title = trim($_POST['title'] ?? '');
             $content = trim($_POST['content'] ?? '');
             $only_me = isset($_POST['only_me']) ? 1 : 0;
             if ($title && $content) {
@@ -136,5 +136,38 @@ $posts = $stmt->fetchAll();
             <input type="hidden" name="action" value="logout">
             <button type="submit">Logout</button>
         </form>
+
     <?php endif; ?>
+    <h2>Posts</h2>
+    <?php foreach ($posts as $p): ?>
+        <article>
+            <h3><?= $p['title'] ?></h3>
+            <p><?= $p['content'] ?></p> <!-- Needs \n handling -->
+            <label>By <?= $p['username'] ?> on
+                <?= $p['created_at'] ?>
+                <?php if ($p['only_me'] == 1): ?>
+                    <label>(Private)</label>
+                <?php endif; ?>
+            </label>
+
+            <?php if (is_logged_in() && ($p['user_id'] == $_SESSION['user_id'] || is_admin())): ?>
+                <details>
+                    <summary>Edit / Delete</summary>
+                    <form method="post">
+                        <input type="hidden" name="action" value="edit_post">
+                        <input type="hidden" name="post_id" value="<?= $p['id'] ?>">
+                        <input type="text" name="title" value="<?= $p['title'] ?>" required><br>
+                        <textarea name="content" required><?= $p['content'] ?></textarea><br>
+                        <label><input type="checkbox" name="only_me" <?= $p['only_me'] ? 'checked' : '' ?>> Only me</label><br>
+                        <button type="submit">Save changes</button>
+                    </form>
+                    <form method="post" onsubmit="return confirm('Delete this post?');">
+                        <input type="hidden" name="action" value="delete_post">
+                        <input type="hidden" name="post_id" value="<?= $p['id'] ?>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </details>
+            <?php endif; ?>
+        </article>
+    <?php endforeach; ?>
 </body>
