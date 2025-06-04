@@ -101,7 +101,7 @@ const UserPage: React.FC<{
     const fetchUserPosts = async () => {
       try {
         const res = await axios
-          .get(`http://localhost/post/get-posts-by-user-id?id=${userId}`, {
+          .get(`${API_URL}/post/get-posts-by-user-id?id=${userId}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
