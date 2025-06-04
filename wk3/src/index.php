@@ -17,7 +17,6 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-
 function is_logged_in(): bool
 {
     return isset($_SESSION['username']);
@@ -80,6 +79,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->prepare('INSERT INTO posts (user_id, title, content, only_me) VALUES (?, ?, ?, ?)')
                     ->execute([$_SESSION['user_id'], $title, $content, $only_me]);
             }
+            header('Location: /');
+            exit;
+
+        case 'edit_post':
+            if (!is_logged_in()) {
+                header('Location: /');
+                exit;
+            }
+            $post_id = $_POST['post_id'] ?? 0;
+            $title = trim($_POST['title'] ?? '');
+            $content = trim($_POST['content'] ?? '');
+            $only_me = isset($_POST['only_me']) ? 1 : 0;
+
+            if ($title && $content) {
+                $stmt = $pdo->prepare('UPDATE posts SET title = ?, content = ?, only_me = ? WHERE id = ? AND (user_id = ? OR ?)');
+                $stmt->execute([$title, $content, $only_me, $post_id, $_SESSION['user_id'], is_admin()]);
+            }
+            header('Location: /');
+            exit;
+
+        case 'delete_post':
+            if (!is_logged_in()) {
+                header('Location: /');
+                exit;
+            }
+            $post_id = $_POST['post_id'] ?? 0;
+            $stmt = $pdo->prepare('DELETE FROM posts WHERE id = ? AND (user_id = ? OR ?)');
+            $stmt->execute([$post_id, $_SESSION['user_id'], is_admin()]);
             header('Location: /');
             exit;
     }
