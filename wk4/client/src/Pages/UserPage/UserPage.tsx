@@ -260,7 +260,7 @@ const UserPage: React.FC<{
           )}
           <div className="user-page-posts">
             {posts.length === 0 ? (
-              <p>No public posts yet.</p>
+              <p>No posts yet.</p>
             ) : (
               posts.map((post) => (
                 <SinglePost
