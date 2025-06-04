@@ -1,6 +1,6 @@
 <?php
 session_start();
-$host = 'localhost';
+$host = 'db';
 $db = 'exampledb';
 $user = 'exampleuser';
 $password = '1234';
@@ -169,7 +169,7 @@ $posts = $stmt->fetchAll();
     <?php foreach ($posts as $p): ?>
         <article>
             <h3><?= $p['title'] ?></h3>
-            <p><?= $p['content'] ?></p> <!-- Needs \n handling -->
+            <p><?= nl2br(htmlspecialchars($p['content'])) ?></p>
             <label>By <?= $p['username'] ?> on
                 <?= $p['created_at'] ?>
                 <?php if ($p['only_me'] == 1): ?>

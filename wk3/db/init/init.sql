@@ -1,7 +1,11 @@
--- DROP DATABASE IF EXISTS exampledb;
-
+DROP DATABASE IF EXISTS exampledb;
 CREATE DATABASE IF NOT EXISTS exampledb;
 USE exampledb;
+
+DROP USER IF EXISTS 'exampleuser'@'%';
+CREATE USER 'exampleuser'@'%' IDENTIFIED WITH mysql_native_password BY '1234';
+GRANT ALL PRIVILEGES ON exampledb.* TO 'exampleuser'@'%';
+FLUSH PRIVILEGES;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,

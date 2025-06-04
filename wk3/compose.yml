@@ -6,19 +6,20 @@ services:
       - "8080:80"
     volumes:
       - ./src:/var/www/html
-    networks:
-      - default
+    depends_on:
+      - db
+
   db:
-    image: mysql:latest
+    image: mysql:8.3 # mysql:latest returns connection refused error
     container_name: php-blog-db
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_USER: exampleuser
-      MYSQL_PASSWORD: examplepass
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: exampledb
-    ports:
-      - "3306:3306"
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: 1234
     volumes:
+      - db-data:/var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d
-    networks:
-      - default
+
+volumes:
+  db-data:
