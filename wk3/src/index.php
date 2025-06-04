@@ -20,12 +20,69 @@ try {
 
 function is_logged_in(): bool
 {
-    return isset($_SESSION['user']);
+    return isset($_SESSION['username']);
 }
 
 function is_admin(): bool
 {
-    return isset($_SESSION['user']) && $_SESSION['user'] === 'admin';
+    return isset($_SESSION['username']) && $_SESSION['username'] === 'admin';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+
+    switch ($action) {
+        case 'register':
+            $username = trim($_POST['username'] ?? '');
+            $password = $_POST['password'] ?? '';
+            if ($username && $password) {
+                $stmt = $pdo->prepare('SELECT id FROM users WHERE username = ?');
+                $stmt->execute([$username]);
+                if (!$stmt->fetch()) {
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
+                    $pdo->prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)')
+                        ->execute([$username, $hash]);
+                }
+            }
+            header('Location: /');
+            exit;
+
+        case 'login':
+            $username = trim($_POST['username'] ?? '');
+            $password = $_POST['password'] ?? '';
+            $stmt = $pdo->prepare('SELECT id, password_hash, is_admin FROM users WHERE username = ?');
+            $stmt->execute([$username]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password_hash'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $username;
+                $_SESSION['is_admin'] = $user['is_admin'];
+            }
+            header('Location: /');
+            exit;
+
+        case 'logout':
+            session_unset();
+            session_destroy();
+            header('Location: /');
+            exit;
+
+        case 'create_post':
+            if (!is_logged_in()) {
+                header('Location: /');
+                exit;
+            }
+            $title   = trim($_POST['title'] ?? '');
+            $content = trim($_POST['content'] ?? '');
+            $only_me = isset($_POST['only_me']) ? 1 : 0;
+            if ($title && $content) {
+                $pdo->prepare('INSERT INTO posts (user_id, title, content, only_me) VALUES (?, ?, ?, ?)')
+                    ->execute([$_SESSION['user_id'], $title, $content, $only_me]);
+            }
+            header('Location: /');
+            exit;
+    }
 }
 
 if (is_admin()) {
