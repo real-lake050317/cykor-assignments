@@ -1,7 +1,22 @@
 <?php
 session_start();
+$host = 'localhost';
+$db = 'exampledb';
 $user = 'exampleuser';
-$password = 'examplepass';
+$password = '1234';
+$charset = 'utf8mb4';
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $password, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
 
 function is_logged_in(): bool
 {
@@ -12,6 +27,17 @@ function is_admin(): bool
 {
     return isset($_SESSION['user']) && $_SESSION['user'] === 'admin';
 }
+
+if (is_admin()) {
+    $stmt = $pdo->query('SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC');
+} elseif (is_logged_in()) {
+    $stmt = $pdo->prepare('SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id WHERE p.only_me = 0 OR p.user_id = ? ORDER BY p.created_at DESC');
+    $stmt->execute([$_SESSION['user_id']]);
+} else {
+    $stmt = $pdo->query(query: 'SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id WHERE p.only_me = 0 ORDER BY p.created_at DESC');
+}
+$posts = $stmt->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
