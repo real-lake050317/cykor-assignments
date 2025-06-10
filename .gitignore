@@ -3,6 +3,7 @@ base.c
 .vscode/
 *.o
 **/build/
+./__pycache__/
 
 # exclude LaTeX-related files
 *.tex
