@@ -39,7 +39,7 @@ def kasiski(ciphertext):
     done = [] 
     #중복을 방지하기 위해, kasiski test를 수행한 문자열을 담아, 향후 사용한다. 
 
-    print("Kasiski Test for Each Triple")
+    # print("Kasiski Test for Each Triple")
     for i in range(l-3):
         index_list = []
         index_list.append(i)
@@ -51,13 +51,17 @@ def kasiski(ciphertext):
             done.append(ciphertext[i:i+3])
         if (len(index_list) >= 3):
             k = difference_gcd(index_list)
-            print(ciphertext[i:i+3] + " (" +str(len(index_list)) + ") : " + str(k))
+            # print(ciphertext[i:i+3] + " (" +str(len(index_list)) + ") : " + str(k))
             # 추적을 돕기 위해 kasiski test에 사용된 크기 3짜리 문자열과 나타난 횟수를 함께 출력한다. 
             total.append(k)
             if k >= 3: 
                 meaningful.append(k)
-    print()
-    print("Total GCD results : " + str(gcd_list(total)))
+    # print()
+    # print("Total GCD results : " + str(gcd_list(total)))
+    
+    return gcd_list(total)
 
 ciphertext = "BCBCCLBSTGIGSRATCXRKEIOBVFSHNCERSRURQKBGDWMMHWSBGPXGKLFJCVGFZTIGVJFONWKODGQEHRPQLURMWKHRCVNSXRKVHRAGEHEPAZBDFGPSKPUWCVJQNWXEMFFOYUCWLCTRHSMPWFYKLRDKLGJSBSNVWXLKESDCGETYPVPTSTGKVOGPJHSRWKWYLVIOXQHFFWCFWFYKCJAKJNTCVJGXSSLVFOPSNCTVCFXSNSPZJOPUZHIYFUWXEPLAOPQLGPYELZDGGJOXBIIONSCKSCAJFCVQVFAOCVKVOETFKSLIESOBUFTKLGNZIGPUSZCPUSXRPRHSMPSMDFGDWNAGEHEPABCBCCLBSTGIGSRAYONCUKOLJKJVOBEFZVCIVGYDNRKWCFZQSLGVBQGPVSBGPXOXBDLGSLGJGKBOZBSQVIODGQEOWMPXCDFGIGDFGJSXCYGFYETRACLQKCXJARHDPCTHOBCSFYYFVFCRWUSXRDFRIDTFAKATFGCRJVDOLKEGEJCSIDYNJCVYKUHRCIICELFNCBIHFFDFGLBSTGIGSRAJTERWISKQCEODGQEOVJGRROPKEFOQGRFMFCERZPQWSCQKFBKJVIOSLKEU"
-kasiski(ciphertext)
+
+if __name__ == "__main__":
+    kasiski(ciphertext)
