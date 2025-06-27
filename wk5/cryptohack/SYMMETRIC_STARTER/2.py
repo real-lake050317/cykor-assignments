@@ -11,7 +11,7 @@ words = requests.get(WORDS_URL).text.splitlines()
 # print(ciphertext)
 ciphertext = bytes.fromhex("c92b7734070205bdf6c0087a751466ec13ae15e6f1bcdd3f3a535ec0f4bbae66")
 
-def is_candidate(bs: bytes) -> bool:
+def is_candidate(bs):
     for i in bs:
         if i < 32 or i > 126:
             return False
