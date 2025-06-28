@@ -5,4 +5,3 @@ for i in range(17):
     ans %= 22663
 
 print(ans)
-    

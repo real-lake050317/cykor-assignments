@@ -21,3 +21,6 @@ base.c
 .env
 package-lock.json 
 # not a good idea to ignore package-lock, but since it is used only for the assignment, added
+
+.venv
+

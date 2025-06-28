@@ -72,34 +72,34 @@ if __name__ == "__main__":
 
     print(decrypt(ciphertext, key))
 
-# print(
-#     calculate_expected_key(
-#         return_most_frequent_char(count_frequency(text, 0)),
-#         calculate_expected_offset(return_most_frequent_char(count_frequency(text, 0)), "N"),
-#     )
-# )
-# print(
-#     calculate_expected_key(
-#         return_most_frequent_char(count_frequency(text, 1)),
-#         calculate_expected_offset(return_most_frequent_char(count_frequency(text, 1))),
-#     )
-# )
-# print(
-#     calculate_expected_key(
-#         return_most_frequent_char(count_frequency(text, 2)),
-#         calculate_expected_offset(return_most_frequent_char(count_frequency(text, 2)), "I"),
-#     )
-# )
-# print(
-#     calculate_expected_key(
-#         return_most_frequent_char(count_frequency(text, 3)),
-#         calculate_expected_offset(return_most_frequent_char(count_frequency(text, 3))),
-#     )
-# )
-# print(
-#     calculate_expected_key(
-#         return_most_frequent_char(count_frequency(text, 4)),
-#         calculate_expected_offset(return_most_frequent_char(count_frequency(text, 4))),
-#     )
-# )
+print(
+    calculate_expected_key(
+        return_most_frequent_char(count_frequency(text, 0)),
+        calculate_expected_offset(return_most_frequent_char(count_frequency(text, 0)), "N"),
+    )
+)
+print(
+    calculate_expected_key(
+        return_most_frequent_char(count_frequency(text, 1)),
+        calculate_expected_offset(return_most_frequent_char(count_frequency(text, 1))),
+    )
+)
+print(
+    calculate_expected_key(
+        return_most_frequent_char(count_frequency(text, 2)),
+        calculate_expected_offset(return_most_frequent_char(count_frequency(text, 2)), "I"),
+    )
+)
+print(
+    calculate_expected_key(
+        return_most_frequent_char(count_frequency(text, 3)),
+        calculate_expected_offset(return_most_frequent_char(count_frequency(text, 3))),
+    )
+)
+print(
+    calculate_expected_key(
+        return_most_frequent_char(count_frequency(text, 4)),
+        calculate_expected_offset(return_most_frequent_char(count_frequency(text, 4))),
+    )
+)
 

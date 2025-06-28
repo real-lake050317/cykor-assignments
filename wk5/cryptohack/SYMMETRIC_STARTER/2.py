@@ -2,7 +2,6 @@ import hashlib, requests, string
 from tqdm import tqdm
 from Crypto.Cipher import AES
 
-URI = "https://aes.cryptohack.org/passwords_as_keys/"
 WORDS_URL = "https://gist.githubusercontent.com/wchargin/8927565/raw/d9783627c731268fb2935a731a618aa8e95cf465/words"
 
 words = requests.get(WORDS_URL).text.splitlines()
@@ -30,4 +29,3 @@ for word in tqdm(words, total=len(words)):
     if is_candidate(decrypted):
         print(f"Candidate found. keyword: {word}, key: {key_hex}, plaintext: {decrypted.decode()}")
         print(decrypted)
-        break

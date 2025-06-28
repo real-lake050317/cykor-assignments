@@ -11,14 +11,9 @@ def bezout(a, b):
     while r != 0:
         quotient = old_r // r
         remainder = old_r - quotient * r
-        # print(f"{old_r} = {r} * {quotient} + {remainder}")
         old_r, r = r, remainder
         old_s, s = s, old_s - quotient * s
         old_t, t = t, old_t - quotient * t
-
-    # print(f"GCD = {old_r}")
-    # print(f"{a}*({old_s}) + {b}*({old_t}) = {a*old_s + b*old_t}")
-    # print(old_s, old_t)
 
     return old_r, old_s, old_t
 
@@ -27,6 +22,5 @@ def inverse(n, a):
     if g != 1:
         return -1
     return s % a
-        
         
 print(inverse(11, 3))
